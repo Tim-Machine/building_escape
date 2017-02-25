@@ -21,20 +21,23 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	Owner = GetOwner();
+
 }
 
 void UOpenDoor::OpenDoor() {
+	if (!Owner) { return; }
 	Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
 }
 
 void UOpenDoor::CloseDoor() {
+	if (!Owner) { return; }
 	Owner->SetActorRotation(FRotator(0.0f, CloseAngle, 0.0f));
 }
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	if (!PressurePlate) { return; }
 	// poll the tirgger volume
 	if (GetTotalMassOfActorsOnPlate() > 50.f) {
 		OpenDoor();
@@ -51,7 +54,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 float UOpenDoor::GetTotalMassOfActorsOnPlate() {
 
 	float TotalMass = 0.f;
-
+	if (!PressurePlate) { return 0.0f; }
 	// find all actors  in trigger
 	TArray<AActor*> OverlappingActors;
 	PressurePlate->GetOverlappingActors( OUT OverlappingActors);
