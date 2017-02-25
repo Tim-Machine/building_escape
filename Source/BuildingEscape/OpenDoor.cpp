@@ -29,7 +29,7 @@ void UOpenDoor::BeginPlay()
 
 void UOpenDoor::OpenDoor() {
 	if (!Owner) { return; }
-	Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
+	OnOpenRequest.Broadcast();
 }
 
 void UOpenDoor::CloseDoor() {
