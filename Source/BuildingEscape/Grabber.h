@@ -19,6 +19,10 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void BindInputComponent();
+
+	void FindPhysicsComponent();
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -28,6 +32,16 @@ private:
 	//how far in front can  i grab
 	UPROPERTY(EditAnywhere)
 	float Reach = 100.0f;
-		
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputComponent = nullptr;
+	
+	// RayCast and grab what is in reach;
+	void Grab();
+
+	// release object that has been grabbed
+	void Release();
+
+	const FHitResult GetFirstPhysicsBodyInReach();
 	
 };
