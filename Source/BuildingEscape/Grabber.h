@@ -26,7 +26,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	FVector GetReachLineEnd();
+	FVector GetReachLineStart();
 
 private:
 	//how far in front can  i grab
