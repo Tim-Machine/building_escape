@@ -44,8 +44,6 @@ void UGrabber::FindPhysicsComponent() {
 }
 
 void UGrabber::Grab() {
-	UE_LOG(LogTemp, Error, TEXT("Grab Key pressed "))
-
 	// try and grab actor with physics
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto componentToGrab = HitResult.GetComponent();
@@ -55,7 +53,7 @@ void UGrabber::Grab() {
 	if (ActorHit) {
 		PhysicsHandle->GrabComponent(
 			componentToGrab,
-			NAME_None,
+			NAME_None, // no bones needed
 			componentToGrab->GetOwner()->GetActorLocation(),
 			true // allow rotation
 		);
@@ -70,14 +68,10 @@ void UGrabber::Release() {
 
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach() {
 
-	/// set up query parameters
+	FHitResult HitResult;
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-
-	/// ray-cast out to reach distance
-	FHitResult Hit;
-
 	GetWorld()->LineTraceSingleByObjectType(
-		OUT Hit,
+		OUT HitResult,
 		GetReachLineStart(),
 		GetReachLineEnd(),
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
@@ -85,13 +79,13 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach() {
 	);
 
 	/// see what we hit
-	AActor* ActorHit = Hit.GetActor();
+	AActor* ActorHit = HitResult.GetActor();
 
 	if (ActorHit) {
 		UE_LOG(LogTemp, Warning, TEXT("hit %s"), *(ActorHit->GetName()))
 	}
 
-	return Hit;
+	return HitResult;
 }
 
 // Called every frame
